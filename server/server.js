@@ -1,5 +1,5 @@
 const express = require('express');
-// import ApolloServer
+const { authMiddleware } = require('./utils/auth')
 const { ApolloServer } = require('apollo-server-express');
 
 // import our typeDefs and resolvers
@@ -10,11 +10,14 @@ const PORT = process.env.PORT || 3001;
 // create a new Apollo server and pass in our schema data
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: authMiddleware
 });
 
+const cors = require('cors')
 const app = express();
 
+app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
